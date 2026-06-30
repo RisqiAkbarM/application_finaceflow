@@ -145,7 +145,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
                         IconButton(
 
-                          onPressed: () {},
+                          onPressed: () {
+                             Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (_) => const NotificationScreen(),
+                              ),
+                            );
+                          },
 
                           icon: const Icon(
 
@@ -162,7 +168,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
 
                     const SizedBox(height: 30),
-                                        //----------------------------------
+                    
+                    //----------------------------------
                     // CARD SALDO
                     //----------------------------------
 
@@ -488,142 +495,132 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
 
                     const SizedBox(height: 28),
-
-                    const SizedBox(height: 30),
-                    //----------------------------------
-                    // PROFILE CARD
-                    //----------------------------------
-
-                    Container(
-
-                      width: double.infinity,
-
-                      padding: const EdgeInsets.all(18),
-
-                      decoration: BoxDecoration(
-
-                        color: Colors.white,
-
-                        borderRadius: BorderRadius.circular(20),
-
-                        boxShadow: [
-
-                          BoxShadow(
-
-                            color: Colors.black.withOpacity(.05),
-
-                            blurRadius: 15,
-
-                            offset: const Offset(0, 5),
-
-                          ),
-
-                        ],
-
-                      ),
-
-                      child: Row(
-
-                        children: [
-
-                          const CircleAvatar(
-
-                            radius: 28,
-
-                            backgroundColor: AppColors.primary,
-
-                            child: Icon(
-
-                              Icons.person,
-
-                              color: Colors.white,
-
-                            ),
-
-                          ),
-
-                          const SizedBox(width: 15),
-
-                          const Expanded(
-
-                            child: Column(
-
-                              crossAxisAlignment:
-                                  CrossAxisAlignment.start,
-
-                              children: [
-
-                                Text(
-
-                                  "Kim Jong un",
-
-                                  style: TextStyle(
-
-                                    fontWeight: FontWeight.bold,
-
-                                    fontSize: 17,
-
-                                  ),
-
-                                ),
-
-                                SizedBox(height: 4),
-
-                                Text(
-
-                                  "Lihat Profil",
-
-                                  style: TextStyle(
-
-                                    color: Colors.grey,
-
-                                  ),
-
-                                ),
-
-                              ],
-
-                            ),
-
-                          ),
-
-                          IconButton(
-
-                            onPressed: () {
-
-                              Navigator.push(
-
-                                context,
-
-                                MaterialPageRoute(
-
-                                  builder: (_) =>
-                                      const ProfileScreen(),
-
-                                ),
-
-                              );
-
-                            },
-
-                            icon: const Icon(
-
-                              Icons.arrow_forward_ios,
-
-                              size: 18,
-
-                            ),
-
-                          ),
-
-                        ],
-
-                      ),
-
-                    ),
-
-                    const SizedBox(height: 25),
-
+                    Row(
+  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  children: [
+    const Text(
+      "Ringkasan Kategori (Bulan Ini)",
+      style: TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.bold,
+      ),
+    ),
+    TextButton(
+      onPressed: () {},
+      child: const Text("Lihat Semua"),
+    ),
+  ],
+),
+
+const SizedBox(height: 15),
+
+Row(
+  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  children: [
+    _categoryItem(
+      Icons.fastfood,
+      "Makanan",
+      "Rp 85.000",
+      Colors.orange,
+    ),
+    _categoryItem(
+      Icons.directions_bus,
+      "Transportasi",
+      "Rp 60.000",
+      Colors.blue,
+    ),
+    _categoryItem(
+      Icons.shopping_bag,
+      "Belanja",
+      "Rp 500.000",
+      Colors.purple,
+    ),
+    _categoryItem(
+      Icons.sports_esports,
+      "Hiburan",
+      "Rp 300.000",
+      Colors.orangeAccent,
+    ),
+  ],
+),
+const SizedBox(height: 30),
+
+Row(
+  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  children: [
+    const Text(
+      "Transaksi Terbaru",
+      style: TextStyle(
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
+      ),
+    ),
+    TextButton(
+      onPressed: () {},
+      child: const Text("Lihat Semua"),
+    ),
+  ],
+),
+
+Container(
+  decoration: BoxDecoration(
+    color: Colors.white,
+    borderRadius: BorderRadius.circular(16),
+  ),
+  child: Column(
+    children: const [
+      ListTile(
+        leading: CircleAvatar(
+          child: Icon(Icons.fastfood),
+        ),
+        title: Text("Makan Siang"),
+        subtitle: Text("Hari Ini"),
+        trailing: Text(
+          "- Rp 25.000",
+          style: TextStyle(
+            color: Colors.red,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+      Divider(height: 1),
+
+      ListTile(
+        leading: CircleAvatar(
+          child: Icon(Icons.directions_bus),
+        ),
+        title: Text("Transportasi"),
+        subtitle: Text("Hari Ini"),
+        trailing: Text(
+          "- Rp 10.000",
+          style: TextStyle(
+            color: Colors.red,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+      Divider(height: 1),
+
+      ListTile(
+        leading: CircleAvatar(
+          child: Icon(Icons.account_balance_wallet),
+        ),
+        title: Text("Gaji Bulanan"),
+        subtitle: Text("Kemarin"),
+        trailing: Text(
+          "+ Rp 5.000.000",
+          style: TextStyle(
+            color: Colors.green,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    ],
+  ),
+),
+
+const SizedBox(height: 20),
+          
                   ],
 
                 ),
@@ -874,6 +871,48 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
     );
 
+
   }
+// ==============================
+// CATEGORY ITEM
+// ==============================
+
+Widget _categoryItem(
+  IconData icon,
+  String title,
+  String amount,
+  Color color,
+) {
+  return Column(
+    children: [
+      CircleAvatar(
+        radius: 22,
+        backgroundColor: color.withOpacity(.15),
+        child: Icon(
+          icon,
+          color: color,
+        ),
+      ),
+
+      const SizedBox(height: 6),
+
+      Text(
+        title,
+        style: const TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+
+      Text(
+        amount,
+        style: const TextStyle(
+          fontSize: 11,
+          color: Colors.grey,
+        ),
+      ),
+    ],
+  );
+}
 
 }

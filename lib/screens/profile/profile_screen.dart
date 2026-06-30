@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 import '../../core/colors.dart';
 import '../auth/login_screen.dart';
+import '../notification/notification_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -11,10 +13,21 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+      File? _profileImage;
+      final ImagePicker _picker = ImagePicker();
+      Future<void> _pickImage() async {
+  final XFile? image =
+      await _picker.pickImage(source: ImageSource.gallery);
+
+  if (image != null) {
+    setState(() {
+      _profileImage = File(image.path);
+    });
+  }
+}
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
 
       backgroundColor: const Color(0xffF5F7FA),
@@ -51,23 +64,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
             const SizedBox(height: 15),
 
-            const CircleAvatar(
-
-              radius: 55,
-
-              backgroundColor: AppColors.primary,
-
-              child: Icon(
-
-                Icons.person,
-
-                color: Colors.white,
-
-                size: 60,
-
-              ),
-
-            ),
+            GestureDetector(
+              onTap: _pickImage,
+                    child: CircleAvatar(
+                    radius: 55,
+                     backgroundColor: AppColors.primary,
+                   backgroundImage:
+                    _profileImage != null
+                      ? FileImage(_profileImage!)
+                     : null,
+               child: _profileImage == null
+                ? const Icon(
+                   Icons.person,
+                   color: Colors.white,
+                  size: 60,
+                )
+        : null,
+         ),
+      ),
 
             const SizedBox(height: 18),
 
@@ -107,29 +121,49 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
               "Edit Profil",
 
-              () {},
-
+              () {ScaffoldMessenger.of(context).showSnackBar(
+                 const SnackBar(
+                content: Text("Fitur Edit Profil segera hadir"),
+                ),
+               );
+             },
             ),
 
-            _menuTile(
+            
 
-              Icons.lock_outline,
-
-              "Ubah Password",
-
-              () {},
-
-            ),
-
-            _menuTile(
-
-              Icons.notifications_outlined,
-
-              "Notifikasi",
-
-              () {},
-
-            ),
+           _menuTile(
+  Icons.lock_outline,
+  "Ubah Password",
+  () {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text("Ubah Password"),
+        content: const Text(
+          "Fitur ubah password akan menggunakan Firebase Authentication.",
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text("Tutup"),
+          ),
+        ],
+      ),
+    );
+  },
+),
+_menuTile(
+  Icons.notifications_outlined,
+  "Notifikasi",
+  () {
+     Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => const NotificationScreen(),
+      ),
+    );
+  },
+),
 
             _menuTile(
 
@@ -137,7 +171,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
               "Tentang Aplikasi",
 
-              () {},
+              () {
+                showAboutDialog(
+      context: context,
+      applicationName: "FinanceFlow",
+      applicationVersion: "1.0.0",
+      applicationLegalese:
+          "Aplikasi manajemen keuangan pribadi untuk mencatat pemasukan, pengeluaran, dan memantau kondisi keuangan harian.",);
+              },
 
             ),
 
